@@ -260,7 +260,7 @@
     {
       "id": "full-picture",
       "title": "The Full Picture",
-      "description": "GLM-OCR combines a high-performance async pipeline SDK, a production-ready web application, and flexible deployment options into a cohesive document understanding platform. The codebase is well-structured with clear separation between the SDK (glmocr/), applications (apps/), and examples — making it straightforward to contribute, extend, or deploy.",
+      "description": "GLM-OCR combines a high-performance async pipeline SDK, a production-ready web application, and flexible deployment options into a cohesive document understanding platform. The codebase is well-structured with clear separation between the SDK, applications, and examples — making it straightforward to contribute, extend, or deploy.",
       "focusDirectory": "",
       "colorMode": "fileTypes"
     }
