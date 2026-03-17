@@ -180,7 +180,7 @@
     {
       "id": "backend-architecture",
       "title": "Backend: Flows, Steps & Task Management",
-      "description": "The backend follows a clean layered architecture. API routes (api/) handle HTTP requests. Core business logic (core/) uses a Flow/Step pattern — BaseFlow orchestrates PipelineFlow which chains pdf_to_image, layout_ocr, and merge_results steps. The repository pattern (repository/) abstracts database access, and schemas/ define request/response contracts.",
+      "description": "The backend follows a layered architecture. API routes handle HTTP requests. Core logic uses a Flow/Step pattern — PipelineFlow chains pdf_to_image, layout_ocr, and merge_results steps. The repository pattern abstracts database access, and schemas define request/response contracts.",
       "focusDirectory": "apps/backend/app",
       "colorMode": "fileTypes",
       "highlightLayers": [
