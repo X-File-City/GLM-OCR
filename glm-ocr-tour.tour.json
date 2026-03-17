@@ -1,0 +1,268 @@
+{
+  "id": "glm-ocr-onboarding",
+  "title": "GLM-OCR: Multimodal Document Understanding",
+  "description": "A guided tour of the GLM-OCR codebase — a 0.9B parameter OCR system ranked #1 on OmniDocBench V1.5, supporting text, table, formula, and layout recognition across cloud and self-hosted deployments.",
+  "version": "1.0.0",
+  "steps": [
+    {
+      "id": "overview",
+      "title": "Project Overview",
+      "description": "GLM-OCR is organized into three main areas: the core SDK (glmocr/), web applications (apps/), and usage examples (examples/). Configuration lives at the root in pyproject.toml, and the project supports Python 3.10+ with optional extras for layout detection, server mode, and self-hosted inference.",
+      "focusDirectory": "",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "top-level-dirs",
+          "name": "Key Directories",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "glmocr", "type": "directory" },
+            { "path": "apps", "type": "directory" },
+            { "path": "examples", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "root-config",
+          "name": "Root Configuration",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "pyproject.toml", "type": "file" },
+            { "path": "agent.md", "type": "file" },
+            { "path": "README.md", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "sdk-public-api",
+      "title": "SDK Public API",
+      "description": "The glmocr/ package exposes a clean public API. The main entry points are api.py (the GlmOcr class and parse() one-liner), cli.py (command-line interface), and server.py (Flask service). The __init__.py uses lazy loading to keep imports fast. Configuration is handled by config.py (Pydantic models) backed by config.yaml defaults.",
+      "focusDirectory": "glmocr",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "entry-points",
+          "name": "Entry Points",
+          "color": "#10b981",
+          "items": [
+            { "path": "glmocr/api.py", "type": "file" },
+            { "path": "glmocr/cli.py", "type": "file" },
+            { "path": "glmocr/server.py", "type": "file" },
+            { "path": "glmocr/__init__.py", "type": "file" },
+            { "path": "glmocr/__main__.py", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "config-files",
+          "name": "Configuration",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "glmocr/config.py", "type": "file" },
+            { "path": "glmocr/config.yaml", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "pipeline-architecture",
+      "title": "Async Pipeline Architecture",
+      "description": "The heart of GLM-OCR is a three-thread async pipeline in glmocr/pipeline/. Thread 1 (Loader) reads pages and feeds a page_queue. Thread 2 (Layout) detects document regions and feeds a region_queue. Thread 3 (Recognition) calls the OCR model and collects results. This design enables concurrent processing of multi-page documents.",
+      "focusDirectory": "glmocr/pipeline",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "pipeline-core",
+          "name": "Pipeline Core",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "glmocr/pipeline/pipeline.py", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "data-flow",
+      "title": "Data Flow: Load → Detect → Recognize → Format",
+      "description": "Documents flow through four stages. The dataloader/ handles images, PDFs, URLs, and base64 input. The layout/ module runs PP-DocLayoutV3 detection to find text, tables, formulas, and figures. API clients (maas_client.py for cloud, ocr_client.py for self-hosted) perform recognition. Finally, postprocess/ and parser_result/ format output as structured JSON and Markdown.",
+      "focusDirectory": "glmocr",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "stage-1-load",
+          "name": "1. Data Loading",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "glmocr/dataloader", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "stage-2-layout",
+          "name": "2. Layout Detection",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "glmocr/layout", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "stage-3-recognize",
+          "name": "3. OCR Recognition",
+          "color": "#ef4444",
+          "items": [
+            { "path": "glmocr/maas_client.py", "type": "file" },
+            { "path": "glmocr/ocr_client.py", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "stage-4-format",
+          "name": "4. Post-Processing & Results",
+          "color": "#10b981",
+          "items": [
+            { "path": "glmocr/postprocess", "type": "directory" },
+            { "path": "glmocr/parser_result", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "utilities",
+      "title": "Utilities & Helpers",
+      "description": "The utils/ directory provides shared functionality across the pipeline: image processing (loading, base64, PDF conversion), Markdown generation, layout visualization with bounding boxes, result post-processing (deduplication, formula cleanup), and structured logging with performance profiling.",
+      "focusDirectory": "glmocr/utils",
+      "colorMode": "fileTypes"
+    },
+    {
+      "id": "web-application",
+      "title": "Web Application Stack",
+      "description": "The apps/ directory contains a full-stack document processing application. The FastAPI backend implements async task management with progress tracking (20% PDF conversion, 65% OCR, 15% result merging), distributed locking, retry/recovery handlers, and multi-format file conversion. A frontend UI provides the user interface.",
+      "focusDirectory": "apps",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "backend",
+          "name": "FastAPI Backend",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "apps/backend", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "frontend",
+          "name": "Frontend UI",
+          "color": "#10b981",
+          "items": [
+            { "path": "apps/frontend", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "backend-architecture",
+      "title": "Backend: Flows, Steps & Task Management",
+      "description": "The backend follows a clean layered architecture. API routes (api/) handle HTTP requests. Core business logic (core/) uses a Flow/Step pattern — BaseFlow orchestrates PipelineFlow which chains pdf_to_image, layout_ocr, and merge_results steps. The repository pattern (repository/) abstracts database access, and schemas/ define request/response contracts.",
+      "focusDirectory": "apps/backend/app",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "api-layer",
+          "name": "API Routes",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "apps/backend/app/api", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "core-logic",
+          "name": "Core Business Logic",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "apps/backend/app/core", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "data-layer",
+          "name": "Data & Models",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "apps/backend/app/db", "type": "directory" },
+            { "path": "apps/backend/app/models", "type": "directory" },
+            { "path": "apps/backend/app/repository", "type": "directory" },
+            { "path": "apps/backend/app/schemas", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "examples-and-deployment",
+      "title": "Examples & Deployment Options",
+      "description": "The examples/ directory provides ready-to-run code, sample documents, and expected outputs. Deployment guides cover multiple targets: Ollama for local inference, MLX for Apple Silicon, and fine-tuning notebooks for model customization. The skills/ directory enables agent integration for AI-powered workflows.",
+      "focusDirectory": "examples",
+      "colorMode": "fileTypes",
+      "highlightLayers": [
+        {
+          "id": "example-code",
+          "name": "Usage Examples",
+          "color": "#10b981",
+          "items": [
+            { "path": "examples/example.py", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "deploy-guides",
+          "name": "Deployment Guides",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "examples/ollama-deploy", "type": "directory" },
+            { "path": "examples/mlx-deploy", "type": "directory" },
+            { "path": "examples/finetune", "type": "directory" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ]
+    },
+    {
+      "id": "testing",
+      "title": "Testing",
+      "description": "Tests live in glmocr/tests/ with unit tests (no network or GPU required, using mocked internals) and integration tests. Pytest fixtures in conftest.py provide shared test setup. Dev dependencies include pytest, black, flake8, and mypy for a complete quality pipeline.",
+      "focusDirectory": "glmocr/tests",
+      "colorMode": "fileTypes"
+    },
+    {
+      "id": "full-picture",
+      "title": "The Full Picture",
+      "description": "GLM-OCR combines a high-performance async pipeline SDK, a production-ready web application, and flexible deployment options into a cohesive document understanding platform. The codebase is well-structured with clear separation between the SDK (glmocr/), applications (apps/), and examples — making it straightforward to contribute, extend, or deploy.",
+      "focusDirectory": "",
+      "colorMode": "fileTypes"
+    }
+  ]
+}
