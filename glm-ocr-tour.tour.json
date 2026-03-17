@@ -7,7 +7,7 @@
     {
       "id": "overview",
       "title": "Project Overview",
-      "description": "GLM-OCR is organized into three main areas: the core SDK (glmocr/), web applications (apps/), and usage examples (examples/). Configuration lives at the root in pyproject.toml, and the project supports Python 3.10+ with optional extras for layout detection, server mode, and self-hosted inference.",
+      "description": "GLM-OCR is organized into three main areas: the core SDK (glmocr/), web applications (apps/), and usage examples (examples/). Configuration lives at the root in pyproject.toml, and the project supports Python with optional extras for layout detection, server mode, and self-hosted inference.",
       "focusDirectory": "",
       "colorMode": "fileTypes",
       "highlightLayers": [
